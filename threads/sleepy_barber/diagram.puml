@@ -1,0 +1,35 @@
+@startuml
+actor Cliente as Client
+participant Estabelecimento as Shop
+participant Barbeiro as Barber
+
+== Cliente chega na barbearia ==
+Client -> Shop : enterShop(this)
+Shop -> Shop : queue.offer(client)
+alt Cadeira disponível e barbearia aberta
+    Shop -> Barber : notify()
+    Shop -> Client : return true
+    Client -> Client : wait()
+    Barber -> Shop : nextClient()
+    alt Tem cliente na fila
+        Barber -> Client : cutHair()
+        Barber -> Client : notify()
+    end
+    Client -> Client : saiu satisfeito
+else Cadeira indisponível ou barbearia fechada
+    Client -> Client : saiu insatisfeito
+end
+
+== Barbeiro aguarda cliente ==
+loop enquanto esta em tempo de espediente ou tem gente na fila
+    Barber -> Shop : nextClient()
+    alt fila vazia
+        Barber -> Shop : wait()
+    else cliente disponível
+        Barber -> Client : cutHair()
+        Barber -> Client : notify()
+    end
+end
+Barber -> Barber : fecha barbearia
+
+@enduml
