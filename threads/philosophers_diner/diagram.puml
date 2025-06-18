@@ -1,0 +1,17 @@
+@startuml
+actor Filosofo as Philosopher
+participant "Primeiro Hashi" as FirstHashi
+participant "Segundo Hashi" as SecondHashi
+
+== Meditação ==
+Philosopher -> Philosopher : meditate()
+
+== Tentativa de comer ==
+Philosopher -> FirstHashi : aquire()
+FirstHashi -> FirstHashi : wait() ate liberar
+FirstHashi -> Philosopher : notify()
+Philosopher -> SecondHashi : aquire()
+SecondHashi -> SecondHashi : wait() ate liberar
+SecondHashi -> Philosopher : notify()
+Philosopher -> Philosopher : eat()
+@enduml
